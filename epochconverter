@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Epoch Time Converter</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+}
+.container {
+text-align: center;
+padding: 20px;
+line-height: 1.5;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<label for="timezone">Select Timezone:</label>
+<br>
+<select id="timezone">
+<option value="">-- Select Timezone --</option>
+<option value="UTC">UTC</option>
+<option value="America/New_York">America/New_York (UTC-04)</option>
+<option value="Europe/London">Europe/London (UTC+01)</option>
+<option value="Asia/Tokyo">Asia/Tokyo (UTC+09)</option>
+<option value="Australia/Sydney">Australia/Sydney (UTC+10)</option>
+<option value="America/Los_Angeles">America/Los_Angeles (UTC-07)</option>
+<option value="Europe/Berlin">Europe/Berlin (UTC+02)</option>
+<option value="Asia/Dubai">Asia/Dubai (UTC+04)</option>
+<option value="Asia/Kolkata">Asia/Kolkata (UTC+05:30)</option>
+<option value="Asia/Singapore">Asia/Singapore (UTC+08)</option>
+<option value="America/Sao_Paulo">America/Sao_Paulo (UTC-03)</option>
+</select>
+<br><br>
+<label for="epochTime">Epoch Time:</label>
+<br>
+<input type="text" id="epochTime" placeholder="Enter Epoch Time">
+<br>
+<p>Supports Unix timestamps in seconds.</p>
+<br>
+<label for="dateTime">Human Date Format:</label>
+<br>
+<input type="text" id="dateTime" placeholder="Enter Date and Time">
+<br>
+<p>Input format: YYYY-MM-DD HH:MM (when converting epoch to human-readable format, the output will be in YYYY-MM-DD HH:MM:SS)</p>
+<br>
+<button onclick="convert()">Convert Now</button>
+<br><br>
+<p id="conversionResult"></p>
+</div>
+
+<script>
+function convert() {
+var timezone = document.getElementById("timezone").value;
+if (timezone === "") {
+document.getElementById("conversionResult").textContent = "Please select a timezone first.";
+return;
+}
+
+var epochInput = document.getElementById("epochTime").value;
+var dateTimeInput = document.getElementById("dateTime").value;
+
+if (epochInput !== "") {
+var dateTimeOutput = new Date(parseInt(epochInput) * 1000).toLocaleString('en-GB', { timeZone: timezone, day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+document.getElementById("dateTime").value = dateTimeOutput;
+document.getElementById("conversionResult").textContent = "";
+} else if (dateTimeInput !== "") {
+var dateComponents = dateTimeInput.split(/[\/\s:T-]/);
+var convertedEpoch = Math.floor(new Date(Date.UTC(dateComponents[0], dateComponents[1] - 1, dateComponents[2], dateComponents[3], dateComponents[4])).getTime() / 1000);
+document.getElementById("epochTime").value = convertedEpoch;
+document.getElementById("conversionResult").textContent = "";
+}
+}
+</script>
+</body>
+</html>
